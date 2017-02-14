@@ -25,7 +25,8 @@ namespace {
 		cout << d << endl;  // Should just print [7]
 
 		a.ReadChain(); // User enters a chain, for example [4: 10 30 -1 2]
-		cout << a;  // Output should be what user entered.
+		cout << "end ReadChain" << endl;
+/*		cout << a;  // Output should be what user entered.
 
 		b.ReadChain();  // Same for b.
 		cout << b;
@@ -47,6 +48,8 @@ namespace {
 		a = move(e);  // Move assignment operator for a.
 		cout << a;
 		cout << e;
+
+*/
 	}
 
 	void TestPart2() {
@@ -59,6 +62,7 @@ namespace {
 		
 		a.ReadChain();  // User provides input for Chain a.
 		cout << a;
+
 		b.ReadChain();  // User provides input for Chain b.
 		cout << b << endl;
 		cout << a + b << endl; // Concatenates the two Chains.
@@ -70,13 +74,14 @@ namespace {
 		cout << b;
 		b[0] = "a_string";
 		cout << b;
+
 	}
 }// namespace
 
 int main(int argc, char **argv) {
 	
 	TestPart1();
-	TestPart2();
+//	TestPart2();
 return 0;
 }
 

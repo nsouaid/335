@@ -31,8 +31,8 @@ class Chain {
 	Chain(const Chain &rhs) {
 		//array_ = new Object {*rhs.array_};?
 
-		//first create this chain with its correct size
-		array_ = new Object[(int)rhs.size_];
+		//first create this chain with its correct size : static cast!
+		array_ = new Object[static_cast<int>(rhs.size_)];
 
 		//make sure we aso get the size variable
 		size_ = rhs.size_;
@@ -97,11 +97,11 @@ class Chain {
 		//size will be 1
 		size_ = 1;
 
-		//create a new object space for array to put the item in
-		array_ = new Object[(int)size_];
+		//create a new object space for array to put the item in : static cast!
+		array_ = new Object[static_cast<int>(size_)];
 
-		//place item in the array 
-		array_[(int)size_] = item;
+		//place item in the array : static cast!
+		array_[static_cast<int>(size_)] = item;
 
 	}
 
@@ -114,12 +114,10 @@ class Chain {
 	void ReadChain() {
 	
 		//declaration of variables
-		std::string line_from_file;
-		std::string line_no_punc;
-		std::string final_line;
-		std::stringstream theStream;
+		std::string line_from_file = "";
+		std::string line_no_punc = "";
 
-		size_t i = 0, size;
+		size_t i = 0, t_size;
 
 		//get the line from the file that's open
 		std::getline(std::cin, line_from_file);
@@ -133,29 +131,64 @@ class Chain {
 				i++;
 			}
 			else {
+				//place in the better line
 				 line_no_punc += line_from_file[i];
+				i++;
 			}
 		}
 
 		std::cout << "Line without the punctuation: " << line_no_punc << std::endl;
 
-		//obtain and set size
-		size = line_no_punc[0];
-		size_ = (size_t)size;
+		//create a stringstream to manipulate the line_no_punc
+		std::istringstream s_stream(line_no_punc);
 
-		i =1;
+		//make sure that the first char from the string is able to be placed in size_
+		s_stream >> t_size;
 
+		std::cout << t_size << std::endl;
+
+		this.size_ = t_size;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		/*
+		std::string size_as_a_string;
+		std::string final_line = "";
+			the following code gave me trouble. scrapped and tried again differently
+		//obtain and set size using size_as_a_string and stringstream
+		size_as_a_string = line_no_punc[0];
+		//open the new stringstream
+		std::istringstream theStream(size_as_a_string);
+		//do some magic, turn size_as_a_string into size_as_a_size_t
+		theStream >> size_as_a_size_t;
+		size_ = size_as_a_size_t;
+		std::cout << "size_: " << size_ << std::endl;
+		i =2;
 		//remove that number by skipping the first {{0th}} index and placing
 		//the remaining characters into the final string for stringstream use
-		while (i < (line_no_punc.size()-1)) {
-			final_line[i] = line_no_punc[i];
+		std::cout << "line_no_punc.size(): " << line_no_punc.size() << std::endl;
+		while (i < (line_no_punc.size())) {
+			final_line[i-2] += line_no_punc[i];
 			i++;
 		}
-
+		std::cout << "final_line size: " << final_line.size() << std::endl;
 		std::cout << "The line prepared for stringstream: " << final_line << std::endl;
-
 		//put the final_line into the stringstream for manipulation
 		//theStream(final_line);
+		*/
 
 		//cast as type Object
 
@@ -197,7 +230,7 @@ class Chain {
 	// Overloading the << operator.
 	friend std::ostream &operator<<(std::ostream &out, const Chain &a_chain) {
 		for (size_t i = 0; i < a_chain.size()-1; i++) {
-			out << a_chain[i] << std::endl;
+			out << a_chain.array_[i] << std::endl;
 		}
 	return out;
 	}
