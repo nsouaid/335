@@ -12,7 +12,7 @@ using namespace teaching_project;
 namespace {
 	
 	void TestPart1() {
-		
+	
 		cout << "We are in TestPart1()" << endl;
 		cout << "Two empty Chains are created and should yield 0 0:" << endl;
 		Chain<int> a, b;  // Two empty Chains are created
@@ -20,6 +20,7 @@ namespace {
 
 		cout << "A chain containing 7 should be created:" << endl;
 		Chain<int> d{7};  // A chain containing 7 should be created.
+		cout << "d size:" << d.size() << endl;
 		cout << "Should print 7:" << endl;
 		cout << d << endl;  // Should just print [7]
 

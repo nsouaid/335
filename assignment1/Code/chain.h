@@ -24,7 +24,7 @@ class Chain {
 	//  and you will provide an implementation.
 
 	// Zero-parameter constructor using new c++11 syntax.
-	Chain() : size{0}, array_{new Object[0]}{
+	Chain() : size_{0}, array_{new Object[0]}{
 	}
 
 	// Copy-constructor.
@@ -32,13 +32,13 @@ class Chain {
 		//array_ = new Object {*rhs.array_};?
 
 		//first create this chain with its correct size
-		array_ = new Object[rhs.size];
+		array_ = new Object[(int)rhs.size_];
 
 		//make sure we aso get the size variable
-		size_ = rhs.size;
+		size_ = rhs.size_;
 
 		//loop through and transfer the data stored from in one to the other
-		for (int i = 0; i < size_; ++i) {
+		for (size_t i = 0; i < size_; ++i) {
 			array_[i] = rhs.array_[i];
 		}
 	}
@@ -81,9 +81,9 @@ class Chain {
 	~Chain() {
 		//loop through each index of the dynamic array in the heap 
 		//so that we may relcaim its memory, using the delete operator
-		for (int i =0; i < size_; i++) {
+		for (size_t i =0; i < size_; i++) {
 			delete [] array_;
-```		}
+		}
 		//don't forget to set the size to 0.
 		size_ = 0;
 	}
@@ -98,10 +98,10 @@ class Chain {
 		size_ = 1;
 
 		//create a new object space for array to put the item in
-		array_ = new Object[size];
+		array_ = new Object[(int)size_];
 
 		//place item in the array 
-		array_[size] = item;
+		array_[(int)size_] = item;
 
 	}
 
@@ -116,23 +116,28 @@ class Chain {
 		//declaration of variables
 		std::string line_from_file;
 		std::string line_no_punc;
-		std::string final_size;
+		std::string final_line;
+		std::stringstream theStream;
 
-		int i = 0, size;
+		size_t i = 0, size;
 
 		//get the line from the file that's open
-		std::getline(cin, line_from_file);
+		std::getline(std::cin, line_from_file);
+
+		std::cout << "Original line from file (should be): " << line_from_file << std::endl;
 
 		//remove any unecessary punctuation
-		while (i < strlen(line_from_file)) {
+		while (i < (line_from_file.size()-1)) {
 			//if we find punctuation that doesn't belong, 
-			if ((line[i] == 58) || (line[i] == 91) || (line[i] == 93)) {
+			if ((line_from_file[i] == 58) || (line_from_file[i] == 91) || (line_from_file[i] == 93)) {
 				i++;
 			}
 			else {
-				 line_no_punc += line[i];
+				 line_no_punc += line_from_file[i];
 			}
 		}
+
+		std::cout << "Line without the punctuation: " << line_no_punc << std::endl;
 
 		//obtain and set size
 		size = line_no_punc[0];
@@ -142,10 +147,15 @@ class Chain {
 
 		//remove that number by skipping the first {{0th}} index and placing
 		//the remaining characters into the final string for stringstream use
-		while (i < strlen(line_no_punc)) {
+		while (i < (line_no_punc.size()-1)) {
 			final_line[i] = line_no_punc[i];
 			i++;
 		}
+
+		std::cout << "The line prepared for stringstream: " << final_line << std::endl;
+
+		//put the final_line into the stringstream for manipulation
+		//theStream(final_line);
 
 		//cast as type Object
 
@@ -155,18 +165,6 @@ class Chain {
 
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	size_t size() const {
 		return size_;
@@ -198,7 +196,9 @@ class Chain {
 
 	// Overloading the << operator.
 	friend std::ostream &operator<<(std::ostream &out, const Chain &a_chain) {
-	// Print the chain.
+		for (size_t i = 0; i < a_chain.size()-1; i++) {
+			out << a_chain[i] << std::endl;
+		}
 	return out;
 	}
 
