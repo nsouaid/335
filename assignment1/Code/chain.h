@@ -116,8 +116,9 @@ class Chain {
 		//declaration of variables
 		std::string line_from_file;
 		std::string line_no_punc;
-		int i = 0;
-		stringstream size;
+		std::string final_size;
+
+		int i = 0, size;
 
 		//get the line from the file that's open
 		std::getline(cin, line_from_file);
@@ -133,17 +134,20 @@ class Chain {
 			}
 		}
 
-		//cast as type Object
-	
-
 		//obtain and set size
-		size << line_no_punc[0];
-		size_ = strlen(size);
+		size = line_no_punc[0];
+		size_ = (size_t)size;
 
-		//remove that number
-		while
+		i =1;
 
+		//remove that number by skipping the first {{0th}} index and placing
+		//the remaining characters into the final string for stringstream use
+		while (i < strlen(line_no_punc)) {
+			final_line[i] = line_no_punc[i];
+			i++;
+		}
 
+		//cast as type Object
 
 		//place in our objecy array_
 
