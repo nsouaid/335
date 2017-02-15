@@ -24,11 +24,12 @@ class Chain {
 	//  and you will provide an implementation.
 
 	// Zero-parameter constructor using new c++11 syntax.
-	Chain() : size_{0}, array_{new Object[0]}{
+	Chain() : size_{0}, array_{NULL}{
 	}
 
 	// Copy-constructor.
 	Chain(const Chain &rhs) {
+
 		//array_ = new Object {*rhs.array_};?
 
 		//first create this chain with its correct size : static cast!
@@ -71,21 +72,46 @@ class Chain {
 		//but because the rhs is really just a temporary object 
 		//that will soon expire, we can set it to null.
 		rhs.array_ = NULL;
+
+		//to ensure that the other Chain's size has been cleared
+		rhs.size_ = 0;
+
 	}
 
 	// Move-assignment.
 	// Just use std::swap() for all variables.
-	Chain& operator=(Chain &&rhs) = default;
+	Chain& operator=(Chain &&rhs) {
+
+		//swap the "array_" variable
+		std::swap(array_, rhs.array_);
+
+		//swap the "size_" variable
+		std::swap(size_, rhs.size_);
+
+	//do not need to reset (deallocate memory) as it's not necessary to - will find out in class
+	//	rhs.size_ = 0;
+	//	rhs.array_ =NULL;
+
+		//return
+		return *this;
+	}
 
 	//deallocate the memory pointed to by the array_
 	~Chain() {
+
 		//loop through each index of the dynamic array in the heap 
 		//so that we may relcaim its memory, using the delete operator
-		for (size_t i =0; i < size_; i++) {
-			delete [] array_;
-		}
+		//at first I tried to "loop through" the elements of the array so 
+		//that each element would be deleted from the array (using the size_
+		//as a stopping point) but this lead to memory issues (looks like I
+		//was "deleting" un authorized memory locations...
+		delete [] array_;
+		
 		//don't forget to set the size to 0.
 		size_ = 0;
+
+		//set array to null
+		array_ = NULL;
 	}
 
 	// End of big-five.
@@ -97,11 +123,12 @@ class Chain {
 		//size will be 1
 		size_ = 1;
 
-		//create a new object space for array to put the item in : static cast!
-		array_ = new Object[static_cast<int>(size_)];
+		//create a new object space for array to put the item in
+		array_ = new Object [1];
 
-		//place item in the array : static cast!
-		array_[static_cast<int>(size_)] = item;
+		//place item in the array
+		array_[0] = item;
+
 
 	}
 
@@ -122,8 +149,6 @@ class Chain {
 		//get the line from the file that's open
 		std::getline(std::cin, line_from_file);
 
-		std::cout << "Original line from file (should be): " << line_from_file << std::endl;
-
 		//remove any unecessary punctuation
 		while (i < (line_from_file.size()-1)) {
 			//if we find punctuation that doesn't belong, 
@@ -137,31 +162,36 @@ class Chain {
 			}
 		}
 
-		std::cout << "Line without the punctuation: " << line_no_punc << std::endl;
-
 		//create a stringstream to manipulate the line_no_punc
-		std::istringstream s_stream(line_no_punc);
+		std::stringstream ss(line_no_punc);
 
 		//make sure that the first char from the string is able to be placed in size_
-		s_stream >> t_size;
+		ss >> t_size;
 
-		std::cout << t_size << std::endl;
+		//size_ should obtain that value
+		size_ = t_size;
+		
+		//great now that the size is taken care of, we can place the values remaining in the Object array
+		i =0;
+	
+		//create the array of the specified size
 
-		this.size_ = t_size;
+		array_ = new Object [size_];
+	
+		//loop through the rest of the stringstream to
+		//place each obtained value into the Chain
+		while (i < size_) {
 
+			//create the temp object that 
+			Object temp;
 
-
-
-
-
-
-
-
-
-
-
-
-
+			//convert to the Object type
+			ss >> temp;
+			//assign the position in the 
+			array_[i] = temp;
+			//increment i!!!!
+			i++;
+		}		
 
 
 		/*
@@ -171,7 +201,7 @@ class Chain {
 		//obtain and set size using size_as_a_string and stringstream
 		size_as_a_string = line_no_punc[0];
 		//open the new stringstream
-		std::istringstream theStream(size_as_a_string);
+		std::stringstream theStream(size_as_a_string);
 		//do some magic, turn size_as_a_string into size_as_a_size_t
 		theStream >> size_as_a_size_t;
 		size_ = size_as_a_size_t;
@@ -181,7 +211,7 @@ class Chain {
 		//the remaining characters into the final string for stringstream use
 		std::cout << "line_no_punc.size(): " << line_no_punc.size() << std::endl;
 		while (i < (line_no_punc.size())) {
-			final_line[i-2] += line_no_punc[i];
+			final_line += line_no_punc[i];
 			i++;
 		}
 		std::cout << "final_line size: " << final_line.size() << std::endl;
@@ -196,10 +226,12 @@ class Chain {
 
 		//for loop to output
 
+}
 
-	}
-
+	//returns the size of the Chain to outside non-member functions/clients
 	size_t size() const {
+
+		//return
 		return size_;
 	}
 
@@ -207,32 +239,90 @@ class Chain {
 	// @returns the Object at @location.
 	// const version.
 	// abort() if out-of-range.
-	const Object& operator[](size_t location) const { 
-	// Write something
+	const Object& operator[](size_t location) const {
+
+		//declare a size_t variable
+		size_t zero = 0;
+
+		//check to see if the location is within bounds of the array
+		if ((zero <= location) && (location < size_)) {
+
+			//return the Object that exists at that location
+			return array_[location];
+		}
+		//our "return" that is actually an "abort()"
+		else abort();
 	}
 
 	// @location: an index to a location in the range.
 	// @returns the Object at @location.
 	// non-const version.
 	// abort() if out-of-range.
-
 	Object& operator[](size_t location) {
-	// Write something (will be the same as above)
+
+		//declare a size_t variable
+		size_t zero = 0;		
+
+		//check to see if the location is within bounds of the array
+		if ((zero <= location) && (location < size_)) {
+
+			//return the Object that exists at that location
+			return array_[location];
+		}
+		//our "return" that is actually an "abort()"
+		else abort();
 	}
 
 	//  @c1: A chain.
 	//  @c2: A second chain.
 	//  @return the concatenation of the two chains.
 	friend Chain operator+(const Chain &c1, const Chain &c2) {
-	// Write something.
+
+		//create the return object
+		Chain return_chain;
+
+		//first get the new size by obtaining the sizes from the two objects
+		//also so that we can use if as part of the loop
+		return_chain.size_ = ((c1.size_) +(c2.size_));
+
+		//allocate memory
+		return_chain.array_ = new Object[return_chain.size_];
+
+		//keep track of the position of the return chain
+		size_t i = 0;
+
+		//place data into the new return chain from the first object
+		for (size_t j = 0; j < c1.size_; j++) {
+			return_chain.array_[i] = c1.array_[j];
+			i++;
+		}
+
+		//place data into the new return chain from the second object
+		for (size_t k = 0; k < c2.size_; k++) {
+			return_chain.array_[i] = c2.array_[k];
+			i++;
+		}
+	
+		//return
+		return return_chain;
 	}
 
 	// Overloading the << operator.
 	friend std::ostream &operator<<(std::ostream &out, const Chain &a_chain) {
-		for (size_t i = 0; i < a_chain.size()-1; i++) {
-			out << a_chain.array_[i] << std::endl;
+
+		//for style		
+		out << "[ ";
+
+		//loop and output the contents from within the array.
+		for (size_t i = 0; i < a_chain.size(); i++) {
+			out << a_chain.array_[i] << " ";
 		}
-	return out;
+
+		//for style
+		out << "]";
+
+		//return
+		return out;
 	}
 
 	private:
