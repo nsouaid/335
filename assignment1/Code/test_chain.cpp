@@ -84,7 +84,8 @@ namespace {
 		Chain<string> d = a + b;
 		cout << d << endl;
 
-		//    cout << d + "hi_there";  // Adds an element to the end.
+		cout << "LINE 16: d +'high_there' -> ";
+		cout << d + "hi_there" << endl;  // Adds an element to the end.
 		cout << "LINE 17: a[2]->" << a[2] << endl;  // Should print the 3rd element.
 		b[1] = "b_string";  // Should change the 2nd element to “b_string”.
 		cout << "LINE 18: b[1]->" << b << endl;
