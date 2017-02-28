@@ -1,0 +1,26 @@
+// Natalie Souaid - Spring 2017 February 16th
+// The Chain class holds a series of numbers (using a dynamic array).
+// The Chain class has many overloaded operators, and can therefore
+// be used in a natural way (adding two chains together/ "giving"
+//a chain the contents of another (moving)/ etc).
+// This is the expected_output.txt expected output text file
+
+0 0
+[7] 
+[10 30 -1 2]
+[100 200 300]
+[10 30 -1 2]
+[10 30 -1 2]
+[100 200 300]
+[10 30 -1 2] 
+[]
+[10 30 -1 2]
+[]
+[ha y bb]
+[xx yy z amen]
+[ha y bb xx yy z amen]
+[ha y bb xx yy z amen]
+[ha y bb xx yy z amen hi_there]
+bb
+[xx b_string z amen]
+[a_string b_string z amen]
